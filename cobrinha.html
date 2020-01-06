@@ -17,7 +17,7 @@
                 this.cabeca = {x:largura, y:altura};
                 var canvas = document.getElementById('tela');
                 var context = canvas.getContext('2d');
-                context.fillStyle = 'black';
+                context.fillStyle = 'darkolivegreen';
                 context.fillRect(this.cabeca.x, this.cabeca.y, grid, grid);
                 this.corpo.push({x: largura, y:altura - 50});
                 context.fillRect(largura,altura - 50, grid, grid);
@@ -32,6 +32,14 @@
                 clearInterval(inter);
                 location.reload;
                 return;
+            }
+
+            verificaCorpo(x, y){
+                for(var i = 0; i<this.corpo.length -1; i++){
+                    var pad = this.corpo[i];
+                    if(pad.x == x && pad.y == y) return true;
+                }
+                return false;
             }
             anda(){
                 var {x,y} = cobrinha.cabeca;
@@ -50,11 +58,7 @@
                 }
                 if(x<0 || x>= larguraCanv || y< 0 || y>= alturaCanv) return this.morre();
                 console.log("cabeca: x: "+x+"| y:"+y);
-                for(var i = 0; i<this.corpo.length -1; i++){
-                    var pad = this.corpo[i];
-                    console.log("corpo: x: "+pad.x+"| y: "+pad.y);
-                    if(pad.x == x && pad.y == y) return this.morre();
-                }
+                if (this.verificaCorpo(x,y) === true) return this.morre();
                 this.corpo.unshift({x:this.cabeca.x,y:this.cabeca.y});
                 this.cabeca = {x:x,y:y}
                 //console.log("X="+this.cabeca.x+" Y="+this.cabeca.y);
@@ -76,6 +80,9 @@
         var cobrinha;
         var grid;
         var inter;
+        var corMaca = "#222a12";
+        var corFundo = "darkolivegreen";
+        var corCobra = "black";
 
         function proporcoes(){
             var canvas = document.getElementById("tela");
@@ -99,22 +106,27 @@
             }
             //document.getElementById("titulo").innerHTML = m.key;
         });
+
         function desenhaMaca(){
             maca.x = Math.floor(Math.random()*42) * 50;
             maca.y = Math.floor(Math.random()*42) * 50;
-            var canvas = document.getElementById('tela');
-            var context = canvas.getContext('2d');
-            context.fillStyle = 'red';
-            context.fillRect(maca.x, maca.y, grid, grid);
+            if(cobrinha.verificaCorpo(maca.x,maca.y) === false){
+                var canvas = document.getElementById('tela');
+                var context = canvas.getContext('2d');
+                context.fillStyle = corMaca;
+                context.fillRect(maca.x, maca.y, grid, grid);
+                return;
+            }
+            else return desenhaMaca();
         }
 
         function colore(ult){
             var canvas = document.getElementById('tela');
             var context = canvas.getContext('2d');
-            context.fillStyle = 'darkcyan';
+            context.fillStyle = corCobra;
             //console.log("Cobrinha em x:"+cobrinha.cabeca.x+". y:"+cobrinha.cabeca.y);
             context.fillRect(cobrinha.cabeca.x, cobrinha.cabeca.y, grid, grid);
-            context.fillStyle = 'black';
+            context.fillStyle = corFundo;
             var {x,y} = ult;
             context.fillRect(x, y, grid, grid);
         }
@@ -127,6 +139,7 @@
                 proporcoes();
                 cobrinha = new Cobra();
                 window.screenTop = 0;
+                document.getElementById("tela").style.backgroundColor = corFundo;
                 grid = cobrinha.passo;
                 desenhaMaca();
                 var cobra = "&#128013";
@@ -142,13 +155,12 @@
 
 </head>
 
-<body style="background-color: black; height:100%; width:100%; overflow:hidden; position:absolute">
-    <canvas id="tela" name="tela" height=2100 width= 2100 style="display:block; border-color: white; border-style: solid; border-width: 1em; height: 97%; margin: 0px auto;background-color:black; position: centered;">
+<body style="background-color: black; height:100%; width:100%; overflow:hidden; position:absolute; margin: 0px auto;">
+
+    <canvas id="tela" name="tela" height=2100 width= 2100 style="display:block; border-color: white; border-style: solid; border-width: 1em; height: 100%; margin: 0px auto; position: centered; box-sizing: border-box;">
     </canvas>
-    
-    <!--
-    <h1 id="titulo">OII</h1>
-    -->
+
+
 </body>
 
 </html>
