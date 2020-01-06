@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<head>
+    <script>
+        //colocar menu de cores
+        // fazer menuzinho inicial
+        //
+        class Cobra{ 
+            constructor(){
+                this.tamanho = 2;
+                this.direcao = 1; //1 = cima, 2 = dir, 3 = baixo, 4 = esq;
+                this.corpo = [];
+                this.passo = 50;
+                var altura = alturaCanv/2;
+                var largura = larguraCanv /2;
+                //console.log("Iniciando...\n");
+                //console.log("X:"+largura+" Y:"+altura);
+                this.cabeca = {x:largura, y:altura};
+                var canvas = document.getElementById('tela');
+                var context = canvas.getContext('2d');
+                context.fillStyle = 'black';
+                context.fillRect(this.cabeca.x, this.cabeca.y, grid, grid);
+                this.corpo.push({x: largura, y:altura - 50});
+                context.fillRect(largura,altura - 50, grid, grid);
+            }
+
+            come(x, y){
+                this.cabeca = {x:x,y:y}
+                this.tamanho = this.corpo.unshift({x,y});
+            }
+            morre(){
+                window.alert("Game Over!");
+                clearInterval(inter);
+                location.reload;
+                return;
+            }
+            anda(){
+                var {x,y} = cobrinha.cabeca;
+                switch(this.direcao){
+                    case 1: 
+                        y -=this.passo;
+                        break;
+                    case 2:
+                        x+=this.passo;
+                        break;
+                    case 3:
+                        y+=this.passo;
+                        break;
+                    case 4:
+                        x-=this.passo;
+                }
+                if(x<0 || x>= larguraCanv || y< 0 || y>= alturaCanv) return this.morre();
+                console.log("cabeca: x: "+x+"| y:"+y);
+                for(var i = 0; i<this.corpo.length -1; i++){
+                    var pad = this.corpo[i];
+                    console.log("corpo: x: "+pad.x+"| y: "+pad.y);
+                    if(pad.x == x && pad.y == y) return this.morre();
+                }
+                this.corpo.unshift({x:this.cabeca.x,y:this.cabeca.y});
+                this.cabeca = {x:x,y:y}
+                //console.log("X="+this.cabeca.x+" Y="+this.cabeca.y);
+                //this.corpo.unshift({x:x,y:y});
+                if(maca.x == x && maca.y == y){
+                    cobrinha.tamanho++;
+                    console.log("Comeu a maçã");
+                    desenhaMaca();
+                    return {x:0,y:0};
+                }
+                else return this.corpo.pop();
+            }
+
+        }
+
+        var maca = {x:0,y:0};
+        var alturaCanv;
+        var larguraCanv;
+        var cobrinha;
+        var grid;
+        var inter;
+
+        function proporcoes(){
+            var canvas = document.getElementById("tela");
+            canvas.clientWidth = canvas.clientHeight;
+            alturaCanv = canvas.height;
+            larguraCanv = canvas.width;          
+        }
+        document.addEventListener("keydown", function (m){
+            var {x,y} = cobrinha.cabeca;
+            if(m.key === "ArrowUp"){
+                if(cobrinha.direcao != 3) cobrinha.direcao = 1;
+            }
+            else if (m.key ==="ArrowDown"){
+                if(cobrinha.direcao != 1) cobrinha.direcao = 3;
+            }
+            else if(m.key === "ArrowLeft"){
+                if(cobrinha.direcao != 2) cobrinha.direcao = 4;
+            }
+            else if(m.key === "ArrowRight"){
+                if(cobrinha.direcao != 4) cobrinha.direcao = 2;
+            }
+            //document.getElementById("titulo").innerHTML = m.key;
+        });
+        function desenhaMaca(){
+            maca.x = Math.floor(Math.random()*42) * 50;
+            maca.y = Math.floor(Math.random()*42) * 50;
+            var canvas = document.getElementById('tela');
+            var context = canvas.getContext('2d');
+            context.fillStyle = 'red';
+            context.fillRect(maca.x, maca.y, grid, grid);
+        }
+
+        function colore(ult){
+            var canvas = document.getElementById('tela');
+            var context = canvas.getContext('2d');
+            context.fillStyle = 'darkcyan';
+            //console.log("Cobrinha em x:"+cobrinha.cabeca.x+". y:"+cobrinha.cabeca.y);
+            context.fillRect(cobrinha.cabeca.x, cobrinha.cabeca.y, grid, grid);
+            context.fillStyle = 'black';
+            var {x,y} = ult;
+            context.fillRect(x, y, grid, grid);
+        }
+
+        function coloreEInicia(callback){
+
+        }
+
+        window.onload = () => {
+                proporcoes();
+                cobrinha = new Cobra();
+                window.screenTop = 0;
+                grid = cobrinha.passo;
+                desenhaMaca();
+                var cobra = "&#128013";
+                var ale = alert("Snake Game "+cobra);
+                setTimeout(function(){ 
+                    inter = window.setInterval(() => {
+                    var ult = cobrinha.anda();
+                    this.colore(ult);
+            }, 120) }, 1);
+        }
+        //167
+    </script>
+
+</head>
+
+<body style="background-color: black; height:100%; width:100%; overflow:hidden; position:absolute">
+    <canvas id="tela" name="tela" height=2100 width= 2100 style="display:block; border-color: white; border-style: solid; border-width: 1em; height: 97%; margin: 0px auto;background-color:black; position: centered;">
+    </canvas>
+    
+    <!--
+    <h1 id="titulo">OII</h1>
+    -->
+</body>
+
+</html>
