@@ -1,164 +1,43 @@
 <!DOCTYPE html>
 <head>
+    <meta charset="UTF-8">
+    <script src="cobrinha.js"></script>
+    <link rel="stylesheet" type="text/css" href="page.css">
     <script>
-        //colocar menu de cores
-        // fazer menuzinho inicial
-        //
-        class Cobra{ 
-            constructor(){
-                this.tamanho = 2;
-                this.direcao = 1; //1 = cima, 2 = dir, 3 = baixo, 4 = esq;
-                this.corpo = [];
-                this.passo = 50;
-                var altura = alturaCanv/2;
-                var largura = larguraCanv /2;
-                //console.log("Iniciando...\n");
-                //console.log("X:"+largura+" Y:"+altura);
-                this.cabeca = {x:largura, y:altura};
-                var canvas = document.getElementById('tela');
-                var context = canvas.getContext('2d');
-                context.fillStyle = 'darkolivegreen';
-                context.fillRect(this.cabeca.x, this.cabeca.y, grid, grid);
-                this.corpo.push({x: largura, y:altura - 50});
-                context.fillRect(largura,altura - 50, grid, grid);
-            }
-
-            come(x, y){
-                this.cabeca = {x:x,y:y}
-                this.tamanho = this.corpo.unshift({x,y});
-            }
-            morre(){
-                window.alert("Game Over!");
-                clearInterval(inter);
-                location.reload;
-                return;
-            }
-
-            verificaCorpo(x, y){
-                for(var i = 0; i<this.corpo.length -1; i++){
-                    var pad = this.corpo[i];
-                    if(pad.x == x && pad.y == y) return true;
-                }
-                return false;
-            }
-            anda(){
-                var {x,y} = cobrinha.cabeca;
-                switch(this.direcao){
-                    case 1: 
-                        y -=this.passo;
-                        break;
-                    case 2:
-                        x+=this.passo;
-                        break;
-                    case 3:
-                        y+=this.passo;
-                        break;
-                    case 4:
-                        x-=this.passo;
-                }
-                if(x<0 || x>= larguraCanv || y< 0 || y>= alturaCanv) return this.morre();
-                console.log("cabeca: x: "+x+"| y:"+y);
-                if (this.verificaCorpo(x,y) === true) return this.morre();
-                this.corpo.unshift({x:this.cabeca.x,y:this.cabeca.y});
-                this.cabeca = {x:x,y:y}
-                //console.log("X="+this.cabeca.x+" Y="+this.cabeca.y);
-                //this.corpo.unshift({x:x,y:y});
-                if(maca.x == x && maca.y == y){
-                    cobrinha.tamanho++;
-                    console.log("Comeu a maçã");
-                    desenhaMaca();
-                    return {x:0,y:0};
-                }
-                else return this.corpo.pop();
-            }
-
-        }
-
-        var maca = {x:0,y:0};
-        var alturaCanv;
-        var larguraCanv;
-        var cobrinha;
-        var grid;
-        var inter;
-        var corMaca = "#222a12";
-        var corFundo = "darkolivegreen";
-        var corCobra = "black";
-
-        function proporcoes(){
-            var canvas = document.getElementById("tela");
-            canvas.clientWidth = canvas.clientHeight;
-            alturaCanv = canvas.height;
-            larguraCanv = canvas.width;          
-        }
-        document.addEventListener("keydown", function (m){
-            var {x,y} = cobrinha.cabeca;
-            if(m.key === "ArrowUp"){
-                if(cobrinha.direcao != 3) cobrinha.direcao = 1;
-            }
-            else if (m.key ==="ArrowDown"){
-                if(cobrinha.direcao != 1) cobrinha.direcao = 3;
-            }
-            else if(m.key === "ArrowLeft"){
-                if(cobrinha.direcao != 2) cobrinha.direcao = 4;
-            }
-            else if(m.key === "ArrowRight"){
-                if(cobrinha.direcao != 4) cobrinha.direcao = 2;
-            }
-            //document.getElementById("titulo").innerHTML = m.key;
-        });
-
-        function desenhaMaca(){
-            maca.x = Math.floor(Math.random()*42) * 50;
-            maca.y = Math.floor(Math.random()*42) * 50;
-            if(cobrinha.verificaCorpo(maca.x,maca.y) === false){
-                var canvas = document.getElementById('tela');
-                var context = canvas.getContext('2d');
-                context.fillStyle = corMaca;
-                context.fillRect(maca.x, maca.y, grid, grid);
-                return;
-            }
-            else return desenhaMaca();
-        }
-
-        function colore(ult){
-            var canvas = document.getElementById('tela');
-            var context = canvas.getContext('2d');
-            context.fillStyle = corCobra;
-            //console.log("Cobrinha em x:"+cobrinha.cabeca.x+". y:"+cobrinha.cabeca.y);
-            context.fillRect(cobrinha.cabeca.x, cobrinha.cabeca.y, grid, grid);
-            context.fillStyle = corFundo;
-            var {x,y} = ult;
-            context.fillRect(x, y, grid, grid);
-        }
-
-        function coloreEInicia(callback){
-
-        }
-
-        window.onload = () => {
-                proporcoes();
-                cobrinha = new Cobra();
-                window.screenTop = 0;
-                document.getElementById("tela").style.backgroundColor = corFundo;
-                grid = cobrinha.passo;
-                desenhaMaca();
-                var cobra = "&#128013";
-                var ale = alert("Snake Game "+cobra);
-                setTimeout(function(){ 
-                    inter = window.setInterval(() => {
-                    var ult = cobrinha.anda();
-                    this.colore(ult);
-            }, 120) }, 1);
-        }
-        //167
+     
     </script>
 
 </head>
 
-<body style="background-color: black; height:100%; width:100%; overflow:hidden; position:absolute; margin: 0px auto;">
+<body>
+<div id="corpo" class="centralizado divModalInativo">
+    <div id="menu" class="divModal">
+        <h1 class="titulo">Jogo da Cobrinha 🐍</h1>
+        <h4>Velocidade:</h4>
+        <input type="number">
+        <h4>Pontuação:</h4>
+        <span id="pontuacao">0</span>
+    </div>
+    <div id="divtela" class="divTela">
+        <canvas id="tela" name="tela" height=2100 width= 2100>
+        </canvas>
+    </div>
+</div>
+    
+<div id="divInicial" class="divModal divModalAtivo centralizado">
+    <h1 class="titulo">Jogo da Cobrinha 🐍</h1>
+    <h2>Regras:</h2>
+    <h3>Não encoste nas laterais do tabuleiro</h3>
+    <h3>Não encoste a cabeça no corpo da cobra</h3>
+    <h3>Consiga a maior pontuação possível</h3>
+    <button id="fechaDivInicial" onclick="iniciaJogo()">Iniciar</button>
+</div>
 
-    <canvas id="tela" name="tela" height=2100 width= 2100 style="display:block; border-color: white; border-style: solid; border-width: 1em; height: 100%; margin: 0px auto; position: centered; box-sizing: border-box;">
-    </canvas>
+<div id="divFinal" class="divModal divModalInativo centralizado">
+    <h1 class="titulo">Fim de Jogo!</h1>
+    <h3 id="pontuacaoFinal">Pontuação: </h3>
+    <button id="botaoJogarDeNovo" onclick="recomeca()">Jogar Novamente!</button>
+</div>
 
 
 </body>
