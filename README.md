@@ -2,4 +2,4 @@
 
 Jogo da cobrinha feito para testar o uso de intervalos em JavaScript e animações/responsividade com uso de media queries em CSS.
 
-![Inicial](Captura de Tela (56).png)
+![Inicial]("./Captura de Tela (56).png")
